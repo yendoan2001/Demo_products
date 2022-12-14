@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-      "strictQuery": false,
+    "strictQuery": false,
     "module": "commonjs",
     "target": "es5",
     "sourceMap": true

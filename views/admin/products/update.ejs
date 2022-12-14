@@ -46,7 +46,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="/admin/dashboard">
+            <a class="nav-link" href="index.html">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -369,54 +369,39 @@
                         <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <a href="/admin/products/create" class="btn btn-success mb-2">Add</a>
-                            <table class="table table-bordered" id="dataTable">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Price</th>
-                                    <th>Category</th>
-                                    <th></th>
-
-                                </tr>
-                                </thead>
-                                <% data.products.forEach((item, index) => { %>
-                                    <tr>
-                                        <td><%= index + 1%></td>
-                                        <td><%= item.name%></td>
-                                        <td><%= item.description%></td>
-                                        <td><%= item.price%></td>
-                                        <td><%= (item.category) ? item.category.name : "None" %></td>
-                                        <td>
-                                            <a onclick="return confirm('Are you sure?')" href="/admin/products/delete/<%=item._id%>" class="btn btn-danger">Delete</a>
-                                            <a href="/admin/products/update/<%=item._id%>" class="btn btn-primary">Update</a>
-                                        </td>
-                                    </tr>
-                                <% }) %>
-                            </table>
-                        </div>
+                        <form action="/admin/products/update/<%=data.product._id%>" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="">Name</label>
+                                <input type="text" name="name" class="form-control" id="" value="<%=data.product.name%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Description</label>
+                                <input type="text" name="description" class="form-control" id="" value="<%=data.product.description%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Price</label>
+                                <input type="text" name="price" class="form-control" id="" value="<%=data.product.price%>">
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1">Category</label>
+                                <select class="form-control" id="" name="category" >
+                                    <%data.categories.forEach(item => { %>
+                                        <option <%= item._id.toString() === data.product.category?._id?.toString() ? "selected": ""%> value="<%= item._id %>"><%= item.name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Content</label>
+                                <textarea class="form-control" id="" rows="3" name="content"><%=data.product.content%></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                            <a href="/admin/products" class="btn btn-primary">Cancel</a>
+                        </form>
                     </div>
                 </div>
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a href="#" class="page-link">Previous</a>
-                        </li>
-                        <% for(let i=1; i<=data.pagination.numberOfPage;i++) {%>
-                            <li class=" <%= i===data.pagination.page?'active page-item':'page-item'%> "><a class="page-link" href="/admin/products?page=<%=i%>"><%=i%></a></li>
-                        <% } %>
-                        <li class=" <%= data.pagination.numberOfPage===data.pagination.page? 'disabled page-item': 'page-item'%>">
-                            <a class="page-link" href="<%='/admin/products?page='+(data.pagination.page+1)%>">Next</a>
-                        </li>
-                    </ul>
-                </nav>
 
             </div>
             <!-- /.container-fluid -->
-
 
         </div>
         <!-- End of Main Content -->
