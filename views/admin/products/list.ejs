@@ -38,7 +38,7 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <div class="sidebar-brand-text mx-3">Yến Đoàn <sup>2</sup></div>
         </a>
 
         <!-- Divider -->
@@ -165,13 +165,13 @@
                 </form>
 
                 <!-- Topbar Search -->
-                <form
+                <form action="/admin/products" method="get"
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
                         <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                               aria-label="Search" aria-describedby="basic-addon2">
+                               aria-label="Search" aria-describedby="basic-addon2" name="productName">
                         <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
+                            <button class="btn btn-primary" type="submit">
                                 <i class="fas fa-search fa-sm"></i>
                             </button>
                         </div>
@@ -328,7 +328,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=currentUser.name%></span>
                             <img class="img-profile rounded-circle"
                                  src="img/undraw_profile.svg">
                         </a>
@@ -379,6 +379,7 @@
                                     <th>Description</th>
                                     <th>Price</th>
                                     <th>Category</th>
+                                    <th>Image</th>
                                     <th></th>
 
                                 </tr>
@@ -390,6 +391,7 @@
                                         <td><%= item.description%></td>
                                         <td><%= item.price%></td>
                                         <td><%= (item.category) ? item.category.name : "None" %></td>
+                                        <td><%= item.image%></td>
                                         <td>
                                             <a onclick="return confirm('Are you sure?')" href="/admin/products/delete/<%=item._id%>" class="btn btn-danger">Delete</a>
                                             <a href="/admin/products/update/<%=item._id%>" class="btn btn-primary">Update</a>
@@ -402,8 +404,8 @@
                 </div>
                 <nav aria-label="...">
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <a href="#" class="page-link">Previous</a>
+                        <li class="<%= data.pagination.page=== 1? 'disabled page-item': 'page-item'%>">
+                            <a class="page-link" href="<%='/admin/products?page='+(data.pagination.page-1)%>">Previous</a>
                         </li>
                         <% for(let i=1; i<=data.pagination.numberOfPage;i++) {%>
                             <li class=" <%= i===data.pagination.page?'active page-item':'page-item'%> "><a class="page-link" href="/admin/products?page=<%=i%>"><%=i%></a></li>

@@ -2,19 +2,33 @@ const ProductModel = require('../../models/product');
 const CategoryModel = require('../../models/category');
 
 class Product {
-    async index(req, res) {
-        const size = 10;
-        const total = await ProductModel.count();
-        const numberOfPage = Math.ceil(total / size);
-        const page = +req.query.page || 1;
-        let products = await ProductModel.find().skip((page-1)*10).limit(10).populate('category');
-        res.render('admin/products/list.ejs', {data:{ products,pagination:{total,numberOfPage,page}}});
-
+    async index(req, res,next) {
+        try {
+            const size = 10;
+            const total = await ProductModel.count();
+            const numberOfPage = Math.ceil(total / size);
+            const page = +req.query.page || 1;
+            let query = {}
+            if (req.query.productName && req.query.productName !== "") {
+                let productFindByName = req.query.productName;
+                query = {
+                    "name": {$regex: productFindByName}
+                }
+            }
+            const products = await ProductModel.find(query).skip((page - 1) * 10).limit(10).populate('category');
+            res.render('admin/products/list.ejs', {data: {products, pagination: {total, numberOfPage, page}}});
+        } catch (e) {
+            next(e);
+        }
     }
 
-    async create(req, res) {
-        let categories = await CategoryModel.find();
-        res.render('admin/products/add.ejs', {data: categories});
+    async showCreateForm(req, res) {
+        try {
+            let categories = await CategoryModel.find();
+            res.render('admin/products/add.ejs', {data: categories});
+        } catch (e) {
+            next(e);
+        }
     }
 
     async store(req, res) {
@@ -28,7 +42,7 @@ class Product {
             })
             res.redirect('/admin/products')
         } catch (e) {
-            console.log(e.message)
+            next(e);
         }
     }
 
@@ -42,7 +56,7 @@ class Product {
                 res.render('error');
             }
         } catch (err) {
-            res.render('error');
+            next(e);
         }
     }
 
@@ -76,7 +90,7 @@ class Product {
                 res.render("error");
             }
         } catch (err) {
-            res.render("error");
+            next(e);
         }
     }
 }
