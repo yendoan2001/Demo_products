@@ -1,5 +1,7 @@
 const ProductModel = require('../../models/product');
 const CategoryModel = require('../../models/category');
+const path = require("path");
+
 
 class Product {
     async index(req, res,next) {
@@ -31,22 +33,24 @@ class Product {
         }
     }
 
-    async store(req, res) {
+    async store(req, res, next) {
         try {
             await ProductModel.create({
                 name: req.body.name,
                 description: req.body.description,
                 category: req.body.category,
                 price: req.body.price,
+                image: req.files.image.name,
                 content: req.body.content,
             })
-            res.redirect('/admin/products')
+            await req.files.image.mv('./public/uploads/' + req.files.image.name)
+            res.redirect('/admin/products');
         } catch (e) {
             next(e);
         }
     }
 
-    async delete(req, res) {
+    async delete(req, res,next) {
         try {
             const product = await ProductModel.findOne({_id: req.params.id});
             if (product) {
@@ -55,12 +59,12 @@ class Product {
             } else {
                 res.render('error');
             }
-        } catch (err) {
+        } catch (e) {
             next(e);
         }
     }
 
-    async showUpdateForm(req, res) {
+    async showUpdateForm(req, res,next) {
         try {
             const product = await ProductModel.findOne({_id: req.params.id});
             const categories = await CategoryModel.find();
@@ -69,12 +73,12 @@ class Product {
             } else {
                 res.render('error')
             }
-        } catch (err) {
-            res.render('error');
+        } catch (e) {
+            next(e)
         }
     }
 
-    async update(req, res) {
+    async update(req, res,next) {
         try {
             const product = await ProductModel.findOne({_id: req.params.id});
             console.log(product)
@@ -82,6 +86,7 @@ class Product {
             product.description = req.body.description;
             product.content = req.body.content;
             product.price = req.body.price;
+            product.image = req.files.image.name;
             product.category = req.body.category;
             await product.save();
             if (product) {
@@ -91,6 +96,22 @@ class Product {
             }
         } catch (err) {
             next(e);
+        }
+    }
+
+    async search(req, res, next){
+        try{
+            let products =  await ProductModel.find(
+                {
+                    name: {$regex: req.query.keyword, $options: 'i'}
+                }
+            ).populate('category')
+
+            res.status(200).json(products)
+        }catch (e) {
+            res.json({
+                'error' : e.message
+            })
         }
     }
 }

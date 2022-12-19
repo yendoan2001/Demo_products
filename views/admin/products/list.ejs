@@ -12,7 +12,8 @@
     <title>SB Admin 2 - Tables</title>
 
     <!-- Custom fonts for this template -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet"
+          type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
@@ -164,9 +165,10 @@
                     </button>
                 </form>
 
+
                 <!-- Topbar Search -->
                 <form action="/admin/products" method="get"
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                      class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                     <div class="input-group">
                         <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
                                aria-label="Search" aria-describedby="basic-addon2" name="productName">
@@ -177,7 +179,19 @@
                         </div>
                     </div>
                 </form>
-
+                <form action="">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="submit" data-toggle="dropdown"
+                                aria-expanded="false">
+                            Filter by
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Name</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </form>
                 <!-- Topbar Navbar -->
                 <ul class="navbar-nav ml-auto">
 
@@ -278,7 +292,8 @@
                                 </div>
                                 <div class="font-weight-bold">
                                     <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                        problem I've been having.</div>
+                                        problem I've been having.
+                                    </div>
                                     <div class="small text-gray-500">Emily Fowler · 58m</div>
                                 </div>
                             </a>
@@ -290,7 +305,8 @@
                                 </div>
                                 <div>
                                     <div class="text-truncate">I have the photos that you ordered last month, how
-                                        would you like them sent to you?</div>
+                                        would you like them sent to you?
+                                    </div>
                                     <div class="small text-gray-500">Jae Chun · 1d</div>
                                 </div>
                             </a>
@@ -302,7 +318,8 @@
                                 </div>
                                 <div>
                                     <div class="text-truncate">Last month's report looks great, I am very happy with
-                                        the progress so far, keep up the good work!</div>
+                                        the progress so far, keep up the good work!
+                                    </div>
                                     <div class="small text-gray-500">Morgan Alvarez · 2d</div>
                                 </div>
                             </a>
@@ -314,7 +331,8 @@
                                 </div>
                                 <div>
                                     <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                        told me that people say this to all dogs, even if they aren't good...</div>
+                                        told me that people say this to all dogs, even if they aren't good...
+                                    </div>
                                     <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                 </div>
                             </a>
@@ -328,7 +346,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=currentUser.name%></span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%= currentUser.name %></span>
                             <img class="img-profile rounded-circle"
                                  src="img/undraw_profile.svg">
                         </a>
@@ -371,115 +389,131 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <a href="/admin/products/create" class="btn btn-success mb-2">Add</a>
-                            <table class="table table-bordered" id="dataTable">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Price</th>
-                                    <th>Category</th>
-                                    <th>Image</th>
-                                    <th></th>
 
-                                </tr>
-                                </thead>
-                                <% data.products.forEach((item, index) => { %>
+                            <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100
+                                navbar-search">
+                                <div class="input-group">
+                                    <input type="text" class="form-control bg-light border-0 small"
+                                           placeholder="Search for..."
+                                           aria-label="Search" aria-describedby="basic-addon2" name="productName"
+                                           onkeyup="searchProduct(this.value)">
+                                </div>
+                            </div>
+                                <table class="table table-bordered" id="dataTable">
+                                    <thead>
                                     <tr>
-                                        <td><%= index + 1%></td>
-                                        <td><%= item.name%></td>
-                                        <td><%= item.description%></td>
-                                        <td><%= item.price%></td>
-                                        <td><%= (item.category) ? item.category.name : "None" %></td>
-                                        <td><%= item.image%></td>
-                                        <td>
-                                            <a onclick="return confirm('Are you sure?')" href="/admin/products/delete/<%=item._id%>" class="btn btn-danger">Delete</a>
-                                            <a href="/admin/products/update/<%=item._id%>" class="btn btn-primary">Update</a>
-                                        </td>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Price</th>
+                                        <th>Category</th>
+                                        <th>Image</th>
+                                        <th></th>
+
                                     </tr>
-                                <% }) %>
-                            </table>
+                                    </thead>
+                                    <% data.products.forEach((item, index) => { %>
+                                        <%= console.log(data.products) %>
+                                        <tr>
+                                            <% let src = '/uploads/' + item.image %>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= item.name %></td>
+                                            <td><%= item.description %></td>
+                                            <td><%= item.price %></td>
+                                            <td><%= (item.category) ? item.category.name : "None" %></td>
+                                            <td><img style="width: 150px; height: auto" src='<%= src %>'
+                                                     alt="Product Img"></td>
+                                            <td>
+                                                <a onclick="return confirm('Are you sure?')"
+                                                   href="/admin/products/delete/<%= item._id %>" class="btn btn-danger">Delete</a>
+                                                <a href="/admin/products/update/<%= item._id %>"
+                                                   class="btn btn-primary">Update</a>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <nav aria-label="...">
+                        <ul class="pagination">
+                            <li class="<%= data.pagination.page === 1 ? 'disabled page-item' : 'page-item' %>">
+                                <a class="page-link" href="<%= '/admin/products?page='+(data.pagination.page - 1) %>">Previous</a>
+                            </li>
+                            <% for(let i = 1; i <= data.pagination.numberOfPage;i++) { %>
+                                <li class=" <%= i === data.pagination.page ? 'active page-item' : 'page-item' %> "><a
+                                            class="page-link" href="/admin/products?page=<%= i %>"><%= i %></a></li>
+                            <% } %>
+                            <li class=" <%= data.pagination.numberOfPage === data.pagination.page ? 'disabled page-item' : 'page-item' %>">
+                                <a class="page-link" href="<%= '/admin/products?page='+(data.pagination.page + 1) %>">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+
                 </div>
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li class="<%= data.pagination.page=== 1? 'disabled page-item': 'page-item'%>">
-                            <a class="page-link" href="<%='/admin/products?page='+(data.pagination.page-1)%>">Previous</a>
-                        </li>
-                        <% for(let i=1; i<=data.pagination.numberOfPage;i++) {%>
-                            <li class=" <%= i===data.pagination.page?'active page-item':'page-item'%> "><a class="page-link" href="/admin/products?page=<%=i%>"><%=i%></a></li>
-                        <% } %>
-                        <li class=" <%= data.pagination.numberOfPage===data.pagination.page? 'disabled page-item': 'page-item'%>">
-                            <a class="page-link" href="<%='/admin/products?page='+(data.pagination.page+1)%>">Next</a>
-                        </li>
-                    </ul>
-                </nav>
+                <!-- /.container-fluid -->
+
 
             </div>
-            <!-- /.container-fluid -->
+            <!-- End of Main Content -->
 
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2020</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
 
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
+        <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
 
-</div>
-<!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Bootstrap core JavaScript-->
-<script src="/js/jquery.min.js"></script>
-<script src="/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="/js/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="/js/jquery.easing.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="/js/sb-admin-2.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="/js/sb-admin-2.min.js"></script>
 
-<!-- Page level plugins -->
-<script src="/js/datatables/jquery.dataTables.js"></script>
-<script src="/js/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="/js/datatables/jquery.dataTables.js"></script>
+    <script src="/js/datatables/dataTables.bootstrap4.min.js"></script>
 
-<!-- Page level custom scripts -->
-<script src="/js/demo/datatables-demo.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="/js/demo/datatables-demo.js"></script>
 
 </body>
 
